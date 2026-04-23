@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String @unique
+  isDeleted Boolean @default(false)
+  deleted_at DateTime?
+  products Product[]
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+  name String 
+  stock Int 
+  price Decimal @db.Decimal(10,2)
+  category Category @relation(fields: [category_id], references: [id])
+  category_id Int 
+  isDeleted Boolean @default(false)
+  deleted_at DateTime?
+}
+
+model Role{
+  id Int @id @default(autoincrement())
+  role String
+  users User[]
+  isDeleted Boolean @default(false)
+  deleted_at DateTime?
+}
+
+model User{
+  id Int @id @default(autoincrement())
+  name String @unique
+  password String
+  role Role @relation(fields : [role_id], references : [id])
+  role_id Int
+  isDeleted Boolean @default(false)
+  deleted_at DateTime?
+}

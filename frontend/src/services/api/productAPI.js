@@ -3,7 +3,7 @@ import { apiClient } from "../axios";
 
 export const productAPI = {
 
-     getAll : async () => {
+     getAll: async () => {
 
           try {
                const res = await apiClient.get("/products");
@@ -15,9 +15,9 @@ export const productAPI = {
           }
      },
 
-     create : async (data) => {
+     create: async (data) => {
           try {
-               const res = await apiClient.post("/products",data);
+               const res = await apiClient.post("/products", data);
                return res.data;
           }
 
@@ -26,9 +26,9 @@ export const productAPI = {
           }
      },
 
-     update : async (id,data) => {
-          try { 
-               const res = await apiClient.put(`/products/${id}`,data);
+     update: async (id, data) => {
+          try {
+               const res = await apiClient.put(`/products/${id}`, data);
                return res.data;
           }
 
@@ -44,6 +44,18 @@ export const productAPI = {
           }
 
           catch (error) {
+               return error.message;
+          }
+     },
+
+     search: async (q) => {
+
+          try {
+               const res = await apiClient.get(`/products/search?q=${q}`);
+               return res.data;
+          }
+
+          catch(error) {
                return error.message;
           }
      }

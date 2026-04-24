@@ -1,9 +1,11 @@
 import { authAPI } from "@/services/api/authAPI";
 import { isLoggedIn, removeAuth, setAuth } from "@/stores/authStore";
+import Cookies from "js-cookie";
 
 export const authGuard = (router) => {
      router.beforeEach(async (to, from) => {
-
+          const token = Cookies.get("token");
+          console.log(token);
           if (to.meta.auth && !isLoggedIn.value) {
                try {
                     const res = await authAPI.verify();

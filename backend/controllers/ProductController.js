@@ -1,27 +1,25 @@
 import { prisma } from "../lib/prisma.js";
 
-export default class ProductController
-{
+export default class ProductController {
 
-     static async index(req,res)
-     {
-          try{
+     static async index(req, res) {
+          try {
                const products = await prisma.product.findMany({
-                    where : {isDeleted : false},
-                    include : {category : true}
+                    where: { isDeleted: false },
+                    include: { category: true }
                });
                console.log("Products retrive successfully");
                return res.status(200).json(products);
           }
-          catch(error){
-               console.log("Error retrived products",error.message);
-               return res.status(500).json({message : "Internal server error"});
+          catch (error) {
+               console.log("Error retrived products", error.message);
+               return res.status(500).json({ message: "Internal server error" });
           }
      }
 
      static async show(req, res) {
           try {
-               const {product} = res.locals;
+               const { product } = res.locals;
                console.log("Product retrive successfully");
                return res.status(200).json(product);
           }
@@ -32,11 +30,11 @@ export default class ProductController
      }
 
      static async store(req, res) {
-          const {data} = res.locals;
+          const { data } = res.locals;
           try {
                const product = await prisma.product.create({
-                    data : data,
-                    include : {category : true}
+                    data: data,
+                    include: { category: true }
                })
                console.log("Product create successfully");
                return res.status(200).json(product);
@@ -48,12 +46,12 @@ export default class ProductController
      }
 
      static async update(req, res) {
-          const {id} = res.locals.product;
+          const { id } = res.locals.product;
           const data = req.body;
           try {
                const product = await prisma.product.update({
-                    where: {id},
-                    data : data
+                    where: { id },
+                    data: data
                });
                console.log("Product update successfully");
                return res.status(200).json(product);
@@ -66,13 +64,13 @@ export default class ProductController
 
      static async destroy(req, res) {
 
-          const {id} = req.params;
+          const { id } = req.params;
           try {
                const product = await prisma.product.update({
-                    where: { id : Number(id) },
-                    data : {
-                         isDeleted : true,
-                         deleted_at : new Date()
+                    where: { id: Number(id) },
+                    data: {
+                         isDeleted: true,
+                         deleted_at: new Date()
                     },
                });
                console.log("Product deleted successfully");
@@ -84,7 +82,7 @@ export default class ProductController
           }
      }
 
-     static async restore(req,res) {
+     static async restore(req, res) {
 
           const { id } = req.params;
           try {
@@ -100,6 +98,34 @@ export default class ProductController
           }
           catch (error) {
                console.log("Error restore product", error.message);
+               return res.status(500).json({ message: "Internal server error" });
+          }
+     }
+
+     static async search(req, res) {
+          const { q } = req.query;
+
+          try {
+               const products = await prisma.product.findMany({
+                    where: {
+                         isDeleted: false,
+                         OR: [
+                              { name: { contains: q || ""} },
+                              {
+                                   category:
+                                        { name: { contains: q } }
+                              }
+                         ]
+                    },
+                    include: { category: true }
+               });
+
+               console.log("Product search successfully");
+               return res.status(200).json(products);
+          }
+
+          catch (error){
+               console.log("Error search product", error.message);
                return res.status(500).json({ message: "Internal server error" });
           }
      }

@@ -3,7 +3,6 @@ import "dotenv/config"
 
 export const auth = (req,res,next) => {
      const {token} = req.cookies;
-     //  token = authorization && authorization.split(" ")[1];
      console.log(token);
      if (!token){
           console.error("No authorization headers");

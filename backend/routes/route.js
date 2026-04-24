@@ -30,6 +30,7 @@ route.get("/categories/:id/restore", canRestoreCategory, CategoryController.rest
 
 // product 
 route.get("/products", ProductController.index);
+route.get("/products/search",ProductController.search)
 route.get("/products/:id",isDelete,ProductController.show);
 route.post("/products",productValidator,ProductController.store);
 route.put("/products/:id", isDelete, productValidator, ProductController.update);

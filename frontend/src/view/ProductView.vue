@@ -2,18 +2,18 @@
 import Table from '@/components/Table.vue';
 import { categoryAPI } from '@/services/api/categoryAPI';
 import { productAPI } from '@/services/api/productAPI';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref,watch } from 'vue';
 
 const products = ref([]);
 const categories = ref([]);
 const newProduct = ref({ name: "", stock: 0, price: 0, category_id: 0 });
 const makeCreate = ref(false);
+const searchQuery = ref("");
 
 const getAllProducts = async () => {
 
      try {
           const data = await productAPI.getAll();
-          categories.value = await categoryAPI.getAll();
           products.value = data.map(p => ({ ...p, isEdit: false }));
      }
 
@@ -39,6 +39,8 @@ const handleCreate = async () => {
           newProduct.value.price = 0;
           products.value.push({ ...product, isEdit: false });
           makeCreate.value = false;
+          searchQuery.value = "";
+          getAllProducts();
      }
 
      catch {
@@ -72,7 +74,7 @@ const onUpdate = async (product) => {
 
 const deleteProduct = async (id) => {
      try {
-          const data = await productAPI.delete(id);
+          await productAPI.delete(id);
           products.value = products.value.filter(p => p.id != id);
      }
 
@@ -81,10 +83,26 @@ const deleteProduct = async (id) => {
      }
 }
 
+const handleSearch = async (query) => {
+
+     if(!query && query.trim() === ""){
+          await getAllProducts();
+          return true;
+     }
+
+     const data = await productAPI.search(query);
+     return products.value = data.map(p => ({...p,isEdit : false}));
+
+}
+
 onMounted(async () => {
      await getAllProducts();
+     categories.value = await categoryAPI.getAll();
+
      // console.log(categories.value)
-})
+});
+
+
 </script>
 
 
@@ -132,6 +150,10 @@ onMounted(async () => {
 
                     </form>
                </div>
+          </div>
+
+          <div>
+               <input type="search" v-debounce:500ms="handleSearch" v-model="searchQuery" placeholder="Search Something ..." class="w-full p-2 border-gray-700 my-3 rounded-lg">
           </div>
           <div>
                <h1>Products</h1>

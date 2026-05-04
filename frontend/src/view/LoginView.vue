@@ -5,6 +5,7 @@ import { useRouter, RouterLink } from 'vue-router';
 import { setAuth } from '@/stores/authStore';
 
 const name = ref("");
+// const email = ref("");
 const password = ref("");
 const error = ref("");
 const router = useRouter();
@@ -18,10 +19,11 @@ const handleLogin = async () => {
      }
 
      const data = {
-          name: name.value,
+          email: name.value,
           password: password.value
      }
-
+     // console.log(password.value);
+     
      try {
           const user = await authAPI.login(data);
           if (user) {

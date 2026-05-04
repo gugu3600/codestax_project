@@ -4,8 +4,8 @@ import Cookies from "js-cookie";
 
 export const authGuard = (router) => {
      router.beforeEach(async (to, from) => {
-          const token = Cookies.get("token");
-          console.log(token);
+          // const token = Cookies.get("token");
+          // console.log(token);
           if (to.meta.auth && !isLoggedIn.value) {
                try {
                     const res = await authAPI.verify();
@@ -19,7 +19,7 @@ export const authGuard = (router) => {
                }
           }
 
-          if (to.path === "/") {
+          if (to.path === "/" || to.path === "/register") {
                if (isLoggedIn.value) {
                     return { path: "/categories" };
                }

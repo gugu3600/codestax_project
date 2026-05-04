@@ -17,7 +17,12 @@ export const productAPI = {
 
      create: async (data) => {
           try {
-               const res = await apiClient.post("/products", data);
+               const res = await apiClient.post("/products", data,{
+                    headers : {
+                         "Content-Type" : "multipart/form-data",
+                         "Accept" : "multipart/form-data"
+                    }
+               });
                return res.data;
           }
 

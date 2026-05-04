@@ -80,7 +80,7 @@ onMounted(async () => {
                </div>
           </div>
 
-          <div>
+               <div>
                <h1>Categories</h1>
                <Table>
                     <template #table-header>

@@ -31,9 +31,18 @@ export default class ProductController {
 
      static async store(req, res) {
           const { data } = res.locals;
+          const profilePath = req.files["profile"] ? req.files["profile"][0].path : null;
+          const imagesPaths = req.files["images"] ? req.files["images"].map(img => ({path : img.path})) : [];
+
           try {
                const product = await prisma.product.create({
-                    data: data,
+                    data: {
+                         ...data,
+                         profile : profilePath,
+                         images : {
+                              create : imagesPaths
+                         }
+                    },
                     include: { category: true }
                })
                console.log("Product create successfully");
@@ -104,7 +113,6 @@ export default class ProductController {
 
      static async search(req, res) {
           const { q } = req.query;
-
           try {
                const products = await prisma.product.findMany({
                     where: {

@@ -10,6 +10,7 @@ import AuthController from "../controllers/AuthController.js";
 import { authValidator } from "../validation/auth/AuthValidate.js";
 import { productValidator } from "../validation/productValidate.js";
 import { auth } from "../middleware/auth.js";
+import { uploadImage } from "../middleware/upload.js";
 
 export const route = express.Router();
 
@@ -32,7 +33,7 @@ route.get("/categories/:id/restore", canRestoreCategory, CategoryController.rest
 route.get("/products", ProductController.index);
 route.get("/products/search",ProductController.search)
 route.get("/products/:id",isDelete,ProductController.show);
-route.post("/products",productValidator,ProductController.store);
+route.post("/products",uploadImage,productValidator,ProductController.store);
 route.put("/products/:id", isDelete, productValidator, ProductController.update);
 route.delete("/products/:id", isDelete, ProductController.destroy);
 route.get("/products/:id/restore", canRestoreProduct, ProductController.restore);

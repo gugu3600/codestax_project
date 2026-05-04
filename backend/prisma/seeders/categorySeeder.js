@@ -9,5 +9,5 @@ export default async function CategorySeeder(){
 
      await prisma.category.createMany({data : data,skipDuplicates : true});
      console.log("Category seeding compeleted");
-     process.exit(0);
+     // process.exit(0);
 }

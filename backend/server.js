@@ -1,4 +1,5 @@
 import express, { urlencoded } from "express";
+import path from "path";
 import cors from "cors"
 import { prisma } from "./lib/prisma.js";
 import { route } from "./routes/route.js";
@@ -10,6 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors(corsConfig)); 
+app.use('/assets', express.static(path.join(process.cwd(), 'assets')));
 
 app.use("/api",route);
 

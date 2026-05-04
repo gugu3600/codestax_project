@@ -13,6 +13,7 @@ export default class AuthController {
                const user = await prisma.user.create({
                     data: {
                          name: data.name,
+                         email : data.name,
                          password: password,
                          role_id: 2
                     }
@@ -31,7 +32,7 @@ export default class AuthController {
 
           try {
                const user = await prisma.user.findUnique({
-                    where: { name: data.name },
+                    where: {email : data.email},
                     include: { role: true }
                });
 
@@ -44,6 +45,7 @@ export default class AuthController {
                const userPayload = {
                     id: user.id,
                     name: user.name,
+                    email : user.email,
                     role_id: user.role_id,
                     role: user.role.role,
                }

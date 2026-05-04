@@ -5,5 +5,5 @@ export const RoleSeeder = async () => {
 
      await prisma.role.createMany({data : roles});
      console.log("Role seeding compeleted");
-     process.exit(0);
+     // process.exit(0);
 }

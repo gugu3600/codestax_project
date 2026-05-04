@@ -28,6 +28,8 @@ model Product {
   price Decimal @db.Decimal(10,2)
   category Category @relation(fields: [category_id], references: [id])
   category_id Int 
+  profile String?
+  images ProductImage[]
   isDeleted Boolean @default(false)
   deleted_at DateTime?
 }
@@ -42,10 +44,18 @@ model Role{
 
 model User{
   id Int @id @default(autoincrement())
-  name String @unique
+  name String 
+  email String @unique 
   password String
   role Role @relation(fields : [role_id], references : [id])
   role_id Int
   isDeleted Boolean @default(false)
   deleted_at DateTime?
+}
+
+model ProductImage { 
+  id Int @id @default(autoincrement())
+  path String
+  product Product @relation(fields: [product_id], references : [id])
+  product_id Int
 }

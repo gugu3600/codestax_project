@@ -4,7 +4,7 @@ import { categoryAPI } from '@/services/api/categoryAPI';
 import { productAPI } from '@/services/api/productAPI';
 import { onMounted, ref, watch } from 'vue';
 
-const imgURL = import.meta.env.VITE_IMG_URL;
+const imgURL = import.meta.env.VITE_IMG_URL
 const products = ref([]);
 const categories = ref([]);
 const newProduct = ref({ name: "", stock: 0, price: 0, category_id: 0 });

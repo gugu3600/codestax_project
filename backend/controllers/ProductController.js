@@ -32,15 +32,15 @@ export default class ProductController {
      static async store(req, res) {
           const { data } = res.locals;
           const profilePath = req.files["profile"] ? req.files["profile"][0].path : null;
-          const imagesPaths = req.files["images"] ? req.files["images"].map(img => ({path : img.path})) : [];
+          const imagesPaths = req.files["images"] ? req.files["images"].map(img => ({ path: img.path })) : [];
 
           try {
                const product = await prisma.product.create({
                     data: {
                          ...data,
-                         profile : profilePath,
-                         images : {
-                              create : imagesPaths
+                         profile: profilePath,
+                         images: {
+                              create: imagesPaths
                          }
                     },
                     include: { category: true }
@@ -118,7 +118,7 @@ export default class ProductController {
                     where: {
                          isDeleted: false,
                          OR: [
-                              { name: { contains: q || ""} },
+                              { name: { contains: q || "" } },
                               {
                                    category:
                                         { name: { contains: q } }
@@ -132,8 +132,54 @@ export default class ProductController {
                return res.status(200).json(products);
           }
 
-          catch (error){
+          catch (error) {
                console.log("Error search product", error.message);
+               return res.status(500).json({ message: "Internal server error" });
+          }
+     }
+
+     static async categoryFilter(req,res) 
+     {
+          const {category} = req.query;
+
+          try {
+               const products = await prisma.product.findMany({
+                    where : {category_id : category},
+                    include : {category : true}
+               });
+               
+               console.log("Products filtered with Category Successfully");
+               return res.status(200).json(products);
+               
+          }
+
+          catch (error) {
+               console.log("Error Fliter with Category product", error.message);
+               return res.status(500).json({ message: "Internal server error" });
+          }
+     }
+
+     static async priceRangeFilter(req, res)
+     {
+          const { min, max } = req.query;
+
+
+          try {
+               const products = await prisma.product.findMany({
+                    where: {
+                         price: {
+                              gte: min ? parseFloat(min) : 0,
+                              ...(max && { lte: parseFloat(max) })
+                         }
+                    },
+                    include: { category: true }
+               });
+               console.log("Products Price Range filter successfully");
+               return res.status(200).json(products);
+          }
+
+          catch (error) {
+               console.log("Error Price Range Filter product", error.message);
                return res.status(500).json({ message: "Internal server error" });
           }
      }

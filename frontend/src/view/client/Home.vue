@@ -15,8 +15,8 @@ const searchItems = async (q) => {
         return true;
     }
 
-    const data = await productAPI.search(query);
-    return products.value = data.map(p => p);
+    return products.value = await productAPI.search(q);
+    
 }
 
 
@@ -33,7 +33,7 @@ onMounted(async () => {
     <div class="w-full max-h-fit">
 
         <div class="search-area">
-            <input type="search" class="w-full p-2 mt-3 rounded-2xl" placeholder="Search Products Here ...">
+            <input type="search" class="w-full p-2 mt-3 rounded-2xl" placeholder="Search Products Here ..." v-debounce:500ms ="searchItems" v-model="search_items"/>
 
         </div>
 

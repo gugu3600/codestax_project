@@ -3,7 +3,6 @@ import { prisma } from "../lib/prisma.js";
 export const categoryIsDelete = async (req,res,next) => {
 
      const {id} = req.params;
-
      try { 
           const category = await prisma.category.findUniqueOrThrow({
                where : {id : Number(id)}

@@ -19,7 +19,7 @@ export const authGuard = (router) => {
                }
           }
 
-          if (to.path === "/" || to.path === "/register") {
+          if (to.path === "/login" || to.path === "/register") {
                if (isLoggedIn.value) {
                     return { path: "/categories" };
                }

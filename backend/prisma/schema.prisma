@@ -30,6 +30,8 @@ model Product {
   category_id Int 
   profile String?
   images ProductImage[]
+  orderItems OrderItem[]
+  cartItems CartItem[]
   isDeleted Boolean @default(false)
   deleted_at DateTime?
 }
@@ -50,6 +52,8 @@ model User{
   role Role @relation(fields : [role_id], references : [id])
   role_id Int
   isDeleted Boolean @default(false)
+  orders Order[]
+  cart Cart?
   deleted_at DateTime?
 }
 
@@ -60,6 +64,70 @@ model ProductImage {
   product_id Int
 }
 
+model Discount {
+  id Int @id @default(autoincrement())
+  name String 
+  description String?
+  amount Decimal? @db.Decimal(10,2)
+  percent Float? 
+  active Boolean @default(true)
+  starts_at DateTime?
+  ends_at DateTime?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  orders Order[]
+  carts Cart[]
+}
+
 model Order {
-  
+  id Int @id @default(autoincrement())
+  user User @relation(fields: [user_id], references: [id])
+  user_id Int
+  discount Discount? @relation(fields: [discount_id], references: [id])
+  discount_id Int?
+  status String @default("pending")
+  total_amount Decimal @db.Decimal(10,2) @default(0)
+  discount_amount Decimal @db.Decimal(10,2) @default(0)
+  order_items OrderItem[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  isDeleted Boolean @default(false)
+  deleted_at DateTime?
+}
+
+model OrderItem {
+  id Int @id @default(autoincrement())
+  order Order @relation(fields: [order_id], references: [id])
+  order_id Int
+  product Product @relation(fields: [product_id], references: [id])
+  product_id Int
+  quantity Int @default(1)
+  unit_price Decimal @db.Decimal(10,2)
+  total_price Decimal @db.Decimal(10,2)
+  discount_amount Decimal @db.Decimal(10,2) @default(0)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Cart {
+  id Int @id @default(autoincrement())
+  user User @relation(fields: [user_id], references: [id])
+  user_id Int @unique
+  discount Discount? @relation(fields: [discount_id], references: [id])
+  discount_id Int?
+  cart_items CartItem[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model CartItem {
+  id Int @id @default(autoincrement())
+  cart Cart @relation(fields: [cart_id], references: [id])
+  cart_id Int
+  product Product @relation(fields: [product_id], references: [id])
+  product_id Int
+  quantity Int @default(1)
+  unit_price Decimal @db.Decimal(10,2)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }

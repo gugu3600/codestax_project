@@ -1,0 +1,22 @@
+Profile :
+
+Name : Hein Htet Zaw
+
+Studied Zoology at YU at 2016 - 2020 
+
+Start Studied Computer Science - mainly programming at NCC(National Cyber City Online Class) in 2022 - 2025
+
+in 2025 attended ACEPlus Soloution for Software Engineering Class 3Mon and OJT for 2Month ,
+
+_________________________________________________________________________________________
+
+Previous Projects :
+
+Tech Stack : { Laravel + React JS (Including Google Map API) + MySQL }, App Type :{(Crisis App )}
+
+Tech Stack : {Laravel + React + MySQL} , APP Type : School Management System 
+__________________________________________________________________________________________ 
+
+Current Project : 
+
+Tech Stack : {ExpressJS(NodeJS) + VueJS + MySQL } , App Type : {Ecommerace App in CodeByte(CodeStax prev 3mon project Engineering Training Program) (Ongoing For Client Side) (Finished for Admin Panel(Admin Side))}    

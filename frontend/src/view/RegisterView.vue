@@ -7,6 +7,7 @@ const router = useRouter();
 const error = ref(null);
 const user = reactive({
      name : "",
+     email : "",
      password : "",
 });
 
@@ -40,6 +41,12 @@ const handleRegister = async () => {
                          <label for="name" class="font-bold">Name</label>
                          <input type="text" id="name" class="p-2 rouded-xl border-b outline-none"
                               placeholder="Enter A Name" v-model="user.name">
+                    </div>
+
+                    <div class="form-group mb-5">
+                         <label for="email" class="font-bold">Email</label>
+                         <input type="text" id="email" class="p-2 rouded-xl border-b outline-none"
+                              placeholder="Enter A Email@gmail.com" v-model="user.email">
                     </div>
 
                     <div class="form-group my-5">

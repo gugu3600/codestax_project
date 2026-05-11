@@ -144,7 +144,7 @@ export default class ProductController {
 
           try {
                const products = await prisma.product.findMany({
-                    where : {category_id : category},
+                    where : {category_id : Number(category)},
                     include : {category : true}
                });
                
@@ -162,7 +162,6 @@ export default class ProductController {
      static async priceRangeFilter(req, res)
      {
           const { min, max } = req.query;
-
 
           try {
                const products = await prisma.product.findMany({

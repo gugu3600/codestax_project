@@ -3,14 +3,16 @@ import "dotenv/config"
 
 export const auth = (req,res,next) => {
      const {token} = req.cookies;
-     console.log(token);
+     // console.log(token);
      if (!token){
           console.error("No authorization headers");
           return res.status(401).json({message : "Token Required"});
      }
 
      try {
-          jwt.verify(token,process.env.JWT_SECRET);
+          const user = jwt.verify(token,process.env.JWT_SECRET);
+          // console.log(user);
+          res.locals.user = user;
           return next();
      }
 

@@ -13,7 +13,7 @@ export default class AuthController {
                const user = await prisma.user.create({
                     data: {
                          name: data.name,
-                         email : data.name,
+                         email : data.email,
                          password: password,
                          role_id: 2
                     }

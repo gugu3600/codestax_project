@@ -11,7 +11,8 @@ import { authValidator } from "../validation/auth/AuthValidate.js";
 import { productValidator } from "../validation/productValidate.js";
 import { auth } from "../middleware/auth.js";
 import { uploadImage } from "../middleware/upload.js";
-
+import {categoryFilterMiddleware} from "../middleware/categoryFilterMiddleware.js"
+import { authorization } from "../middleware/authorization.js";
 export const route = express.Router();
 
 //auth
@@ -19,19 +20,28 @@ route.post("/auth/register", authValidator, AuthController.register);
 route.post("/auth/login", authValidator, AuthController.login);
 route.get("/auth/verify",AuthController.verify);
 
+//products
+route.get("/products", ProductController.index);
+route.get("/products/search",ProductController.search)
+route.get("/products/filter",categoryFilterMiddleware,ProductController.categoryFilter,
+ProductController.priceRangeFilter);
 
-route.use(auth)
-//category 
+//categories
 route.get("/categories", CategoryController.index);
 route.get("/categories/:id", categoryIsDelete, CategoryController.show);
+
+
+route.use(auth)
+route.use(authorization);
+//category 
+
 route.post("/categories",categoryValidator, CategoryController.store);
 route.put("/categories/:id", categoryIsDelete,categoryValidator, CategoryController.update);
 route.delete("/categories/:id", categoryIsDelete, CategoryController.destroy);
 route.get("/categories/:id/restore", canRestoreCategory, CategoryController.restore);
 
 // product 
-route.get("/products", ProductController.index);
-route.get("/products/search",ProductController.search)
+
 route.get("/products/:id",isDelete,ProductController.show);
 route.post("/products",uploadImage,productValidator,ProductController.store);
 route.put("/products/:id", isDelete, productValidator, ProductController.update);

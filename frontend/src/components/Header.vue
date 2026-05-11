@@ -3,9 +3,12 @@ import { onMounted, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import { removeAuth,isLoggedIn } from '@/stores/authStore';
 import { authAPI } from '@/services/api/authAPI';
-const headers = [
-     { path: "/categories", name: "Categories" },
-     { path: "/products", name: "Products" },
+const admin_headers = [
+     {path : "/",name : "Home"},
+     { path: "/admin/categories", name: "Categories" },
+     { path: "/admin/products", name: "Products" },
+     {path : "/admin/orders",name : "Orders"},
+     {path : "/admin/order_items",name : "Order_Items"}
 ];
 const router = useRouter();
 
@@ -25,7 +28,7 @@ const logout = async () => {
      <header>
           <nav class="bg-slate-500 mt-3 p-3 flex justify-between">
                <ul class="text-xl flex gap-3 mx-4">
-                    <li v-for="header in headers" class="hover:text-amber-700">
+                    <li v-for="header in admin_headers" class="hover:text-amber-700">
                          <RouterLink :to="header.path">
                               {{ header.name }}
                          </RouterLink>
@@ -34,7 +37,7 @@ const logout = async () => {
 
                <ul>
                     <li>
-                         <RouterLink v-if="!isLoggedIn" to="/">Login</RouterLink>
+                         <RouterLink v-if="!isLoggedIn" to="/login">Login</RouterLink>
                          <button v-else @click="logout">Logout</button>
                     </li>
                </ul>

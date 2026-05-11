@@ -9,8 +9,8 @@ const routes = [
      {path : "/login",component : import("../view/LoginView.vue")},
      { path: "/register", component: import("../view/RegisterView.vue")},
      {path : "/cart" , component : import ("@/view/client/CartView.vue") ,meta : {auth : true}},
-     {path : "/admin/categories" , component : CategoryView,meta : {auth : true}},
-     { path: "/admin/products", component: ProductView , meta : {auth : true}},
+     {path : "/admin/categories" , component : CategoryView,meta : {auth : true,authorize : true}},
+     { path: "/admin/products", component: ProductView , meta : {auth : true,authorize : true}},
 ]
 
 

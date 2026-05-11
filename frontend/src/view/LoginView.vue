@@ -28,7 +28,7 @@ const handleLogin = async () => {
           const user = await authAPI.login(data);
           if (user) {
                setAuth(user);
-               return router.push("/login");
+               return router.push("/");
           }
           console.log(user);
           error.value = "Wrong Name or Password"

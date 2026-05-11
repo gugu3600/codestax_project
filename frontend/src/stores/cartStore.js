@@ -24,5 +24,9 @@ export const addToCart = async (product) => {
         unit_price: item.price
     }));
 
-    await CartAPI.addToCart(cartItems);
+    return await CartAPI.addToCart(cartItems);
 };
+
+export const getCartItems = async () => {
+
+}

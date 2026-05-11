@@ -128,9 +128,23 @@ export default class OrderController {
                          }
                     });
 
+                    for(const item of cart.cart_items){
+
+                         await tx.product.update({
+                              where : {id : Number(item.product_id)},
+                              data : {
+                                   stock : {
+                                        decrement : item.quantity
+                                   }
+                              }
+                         })
+                    }
+
                     await tx.cartItem.deleteMany({
                          where: { cart_id: cart.id }
                     });
+
+                    
 
                     return newOrder;
                });

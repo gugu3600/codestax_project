@@ -21,14 +21,14 @@ export const authGuard = (router) => {
 
           if (to.path === "/login" || to.path === "/register") {
                if (isLoggedIn.value) {
-                    return { path: "/categories" };
+                    return { path: "/" };
                }
 
                try {
                     const res = await authAPI.verify();
                     if (res) {
                          setAuth(res);
-                         return { path: "/categories" }; 
+                         return { path: "/" }; 
                     }
                } catch (err) {
                     return true;

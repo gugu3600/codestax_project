@@ -88,7 +88,7 @@ model Order {
   status String @default("pending")
   total_amount Decimal @db.Decimal(10,2) @default(0)
   discount_amount Decimal @db.Decimal(10,2) @default(0)
-  order_items OrderItem[]
+  orderItems OrderItem[]
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   isDeleted Boolean @default(false)
@@ -115,7 +115,7 @@ model Cart {
   user_id Int @unique
   discount Discount? @relation(fields: [discount_id], references: [id])
   discount_id Int?
-  cart_items CartItem[]
+  cartItems CartItem[]
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }

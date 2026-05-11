@@ -13,6 +13,11 @@ import { auth } from "../middleware/auth.js";
 import { uploadImage } from "../middleware/upload.js";
 import {categoryFilterMiddleware} from "../middleware/categoryFilterMiddleware.js"
 import { authorization } from "../middleware/authorization.js";
+import CartController from "../controllers/CartController.js";
+import OrderController from "../controllers/OrderController.js";
+import { isOrderDeleted } from "../middleware/isOrderDeleted.js";
+
+
 export const route = express.Router();
 
 //auth
@@ -31,7 +36,20 @@ route.get("/categories", CategoryController.index);
 route.get("/categories/:id", categoryIsDelete, CategoryController.show);
 
 
-route.use(auth)
+route.use(auth);
+
+//cart
+route.get("/cart",CartController.show);
+route.post("/cart",CartController.store);
+
+//orders
+route.get("/orders", OrderController.index);
+route.get("/orders/:id", isOrderDeleted, OrderController.show);
+route.post("/orders", OrderController.store);
+
+//cart_items 
+// route.post("/cart_items",CartController.store);
+
 route.use(authorization);
 //category 
 

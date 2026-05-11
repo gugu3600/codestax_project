@@ -28,11 +28,11 @@ const handleLogin = async () => {
           const user = await authAPI.login(data);
           if (user) {
                setAuth(user);
-               return router.push("/admin/categories");
+               return router.push("/login");
           }
           console.log(user);
           error.value = "Wrong Name or Password"
-          return router.push("/")
+          return router.push("/login")
      }
 
      catch (error) {

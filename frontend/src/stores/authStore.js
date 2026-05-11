@@ -1,7 +1,10 @@
 import { computed, ref } from "vue";
 
+
 export const auth = ref(null);
 // export const getToken = ref(localStorage.getItem("token") || null);
+
+export const userId = computed(() => auth.value?.id || null);
 
 export const setAuth = (user) => {
      auth.value = user;

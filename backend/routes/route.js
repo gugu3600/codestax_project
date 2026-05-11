@@ -37,6 +37,8 @@ route.get("/categories/:id", categoryIsDelete, CategoryController.show);
 
 
 route.use(auth);
+// auth
+route.get("/auth/logout", AuthController.logout);
 
 //cart
 route.get("/cart",CartController.show);
@@ -67,5 +69,5 @@ route.delete("/products/:id", isDelete, ProductController.destroy);
 route.get("/products/:id/restore", canRestoreProduct, ProductController.restore);
 
 // auth
-route.get("/auth/logout", AuthController.logout);
+
 

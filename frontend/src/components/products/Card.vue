@@ -3,11 +3,8 @@
         class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer">
         <!-- Product Image -->
         <div class="w-full h-72 sm:h-80 md:h-64 overflow-hidden bg-gray-100">
-            <img
-                :src="image"
-                :alt="product.name"
-                class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-            />
+            <img :src="image" :alt="product.name"
+                class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
         </div>
 
         <!-- Product Info -->
@@ -43,13 +40,13 @@
                 </div>
             </div>
 
-            <!-- Add to Cart Button -->
-            <button :disabled="product.stock === 0" :class="[
+            <button :disabled="product.stock === 0" @click.stop="$emit('add-to-cart', product)" :class="[
                 'w-full py-2.5 px-4 rounded-md font-semibold transition-colors duration-300',
                 product.stock === 0
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     : 'bg-blue-500 text-white hover:bg-blue-600'
             ]">
+                <i class="fa-solid fa-cart-plus mr-2"></i>
                 {{ product.stock > 0 ? 'Add to Cart' : 'Unavailable' }}
             </button>
         </div>
@@ -71,9 +68,9 @@ defineProps({
         }
     },
 
-    image : {
-        type : String,
-        required : false
+    image: {
+        type: String,
+        required: false
     }
 });
 </script>

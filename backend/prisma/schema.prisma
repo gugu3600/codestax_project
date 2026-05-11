@@ -1,7 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// This is your Prisma schema file
 
 generator client {
   provider = "prisma-client"
@@ -10,124 +7,125 @@ generator client {
 
 datasource db {
   provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
-
 model Category {
-  id Int @id @default(autoincrement())
-  name String @unique
-  isDeleted Boolean @default(false)
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
+  isDeleted  Boolean   @default(false)
   deleted_at DateTime?
-  products Product[]
+  products   Product[]
 }
 
 model Product {
-  id Int @id @default(autoincrement())
-  name String 
-  stock Int 
-  price Decimal @db.Decimal(10,2)
-  category Category @relation(fields: [category_id], references: [id])
-  category_id Int 
-  profile String?
-  images ProductImage[]
-  orderItems OrderItem[]
-  cartItems CartItem[]
-  isDeleted Boolean @default(false)
+  id          Int            @id @default(autoincrement())
+  name        String
+  stock       Int
+  price       Decimal        @db.Decimal(10,2)
+  category    Category       @relation(fields: [category_id], references: [id])
+  category_id Int
+  profile     String?
+  images      ProductImage[]
+  order_items OrderItem[]    // Controller နဲ့ ကိုက်အောင် ပြင်ထားသည်
+  cart_items  CartItem[]     // Controller နဲ့ ကိုက်အောင် ပြင်ထားသည်
+  isDeleted   Boolean        @default(false)
+  deleted_at  DateTime?
+}
+
+model Role {
+  id         Int       @id @default(autoincrement())
+  role       String
+  users      User[]
+  isDeleted  Boolean   @default(false)
   deleted_at DateTime?
 }
 
-model Role{
-  id Int @id @default(autoincrement())
-  role String
-  users User[]
-  isDeleted Boolean @default(false)
+model User {
+  id         Int       @id @default(autoincrement())
+  name       String
+  email      String    @unique
+  password   String
+  role       Role      @relation(fields: [role_id], references: [id])
+  role_id    Int
+  isDeleted  Boolean   @default(false)
+  orders     Order[]
+  cart       Cart?
   deleted_at DateTime?
 }
 
-model User{
-  id Int @id @default(autoincrement())
-  name String 
-  email String @unique 
-  password String
-  role Role @relation(fields : [role_id], references : [id])
-  role_id Int
-  isDeleted Boolean @default(false)
-  orders Order[]
-  cart Cart?
-  deleted_at DateTime?
-}
-
-model ProductImage { 
-  id Int @id @default(autoincrement())
-  path String
-  product Product @relation(fields: [product_id], references : [id])
+model ProductImage {
+  id         Int     @id @default(autoincrement())
+  path       String
+  product    Product @relation(fields: [product_id], references: [id])
   product_id Int
 }
 
 model Discount {
-  id Int @id @default(autoincrement())
-  name String 
-  description String?
-  amount Decimal? @db.Decimal(10,2)
-  percent Float? 
-  active Boolean @default(true)
-  starts_at DateTime?
-  ends_at DateTime?
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  orders Order[]
-  carts Cart[]
+  id              Int       @id @default(autoincrement())
+  name            String
+  description     String?
+  amount          Decimal?  @db.Decimal(10,2)
+  percent         Float?
+  active          Boolean   @default(true)
+  starts_at       DateTime?
+  ends_at         DateTime?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  orders          Order[]
+  carts           Cart[]
 }
 
 model Order {
-  id Int @id @default(autoincrement())
-  user User @relation(fields: [user_id], references: [id])
-  user_id Int
-  discount Discount? @relation(fields: [discount_id], references: [id])
-  discount_id Int?
-  status String @default("pending")
-  total_amount Decimal @db.Decimal(10,2) @default(0)
-  discount_amount Decimal @db.Decimal(10,2) @default(0)
-  orderItems OrderItem[]
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  isDeleted Boolean @default(false)
-  deleted_at DateTime?
+  id              Int         @id @default(autoincrement())
+  user            User        @relation(fields: [user_id], references: [id])
+  user_id         Int
+  discount        Discount?   @relation(fields: [discount_id], references: [id])
+  discount_id     Int?
+  status          String      @default("pending")
+  total_amount    Decimal     @db.Decimal(10,2) @default(0)
+  payable_amount  Decimal     @db.Decimal(10,2) @default(0)
+  discount_amount Decimal     @db.Decimal(10,2) @default(0)
+  order_items     OrderItem[] // Controller နဲ့ ကိုက်အောင် ပြင်ထားသည်
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+  isDeleted       Boolean     @default(false)
+  deleted_at      DateTime?
 }
 
 model OrderItem {
-  id Int @id @default(autoincrement())
-  order Order @relation(fields: [order_id], references: [id])
-  order_id Int
-  product Product @relation(fields: [product_id], references: [id])
-  product_id Int
-  quantity Int @default(1)
-  unit_price Decimal @db.Decimal(10,2)
-  total_price Decimal @db.Decimal(10,2)
-  discount_amount Decimal @db.Decimal(10,2) @default(0)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id              Int      @id @default(autoincrement())
+  order           Order    @relation(fields: [order_id], references: [id])
+  order_id        Int
+  product         Product  @relation(fields: [product_id], references: [id])
+  product_id      Int
+  quantity        Int      @default(1)
+  unit_price      Decimal  @db.Decimal(10,2)
+  total_price     Decimal  @db.Decimal(10,2)
+  discount_amount Decimal  @db.Decimal(10,2) @default(0)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
 }
 
 model Cart {
-  id Int @id @default(autoincrement())
-  user User @relation(fields: [user_id], references: [id])
-  user_id Int @unique
-  discount Discount? @relation(fields: [discount_id], references: [id])
+  id          Int        @id @default(autoincrement())
+  user        User       @relation(fields: [user_id], references: [id])
+  user_id     Int        @unique
+  discount    Discount?  @relation(fields: [discount_id], references: [id])
   discount_id Int?
-  cartItems CartItem[]
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  cart_items  CartItem[] // Controller နဲ့ ကိုက်အောင် ပြင်ထားသည်
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
 }
 
 model CartItem {
-  id Int @id @default(autoincrement())
-  cart Cart @relation(fields: [cart_id], references: [id])
-  cart_id Int
-  product Product @relation(fields: [product_id], references: [id])
+  id         Int      @id @default(autoincrement())
+  cart       Cart     @relation(fields: [cart_id], references: [id])
+  cart_id    Int
+  product    Product  @relation(fields: [product_id], references: [id])
   product_id Int
-  quantity Int @default(1)
-  unit_price Decimal @db.Decimal(10,2)
+  quantity   Int      @default(1)
+  unit_price Decimal  @db.Decimal(10,2)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }

@@ -48,7 +48,6 @@ export default class OrderController {
                const { user } = res.locals;
                const { discount_name } = req.body;
 
-               // Get user's cart with items
                const cart = await prisma.cart.findFirst({
                     where: { user_id: user.id },
                     include: {
@@ -65,12 +64,11 @@ export default class OrderController {
                     return res.status(400).json({ message: "Cart is empty" });
                }
 
-               // Check discount if provided
                let discount = null;
-               if (discount.name) {
+               if (discount_name) {
                     discount = await prisma.discount.findFirst({
                          where: {
-                              name: discount.name,
+                              name: discount_name,
                               active: true,
                               OR: [
                                    { ends_at: null },
@@ -83,7 +81,6 @@ export default class OrderController {
                     }
                }
 
-               // Calculate totals
                let totalAmount = 0;
                let discountAmount = 0;
 
@@ -99,7 +96,6 @@ export default class OrderController {
                     };
                });
 
-               // Apply discount if available
                if (discount) {
                     if (discount.amount) {
                          discountAmount = parseFloat(discount.amount);
@@ -110,7 +106,6 @@ export default class OrderController {
 
                const payableAmount = totalAmount - discountAmount;
 
-               // Create order with order items in a transaction
                const order = await prisma.$transaction(async (tx) => {
                     const newOrder = await tx.order.create({
                          data: {
@@ -119,12 +114,12 @@ export default class OrderController {
                               total_amount: totalAmount,
                               discount_amount: discountAmount,
                               payable_amount: payableAmount,
-                              orderItems: {
+                              order_items: {
                                    create: orderItems
                               }
                          },
                          include: {
-                              orderItems: {
+                              order_items: {
                                    include: {
                                         product: true
                                    }
@@ -133,7 +128,6 @@ export default class OrderController {
                          }
                     });
 
-                    // Clear cart items
                     await tx.cartItem.deleteMany({
                          where: { cart_id: cart.id }
                     });

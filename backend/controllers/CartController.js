@@ -11,9 +11,7 @@ export default class CartController {
 
             console.log("Carts Retrived successfully");
             return res.status(200).json(cart);
-
         }
-
         catch (error) {
             console.log("Error show cart", error.message);
             return res.status(500).json({ message: "Internal server error" });
@@ -25,23 +23,46 @@ export default class CartController {
         const { user } = res.locals;
 
         try {
-            const cart = await prisma.cart.create({
-                data: {
-                    user_id: Number(user.id),
-                    cart_items: {
-                        create: cartItems.map(cartItem => ({
-                            product_id: cartItem.item_id,
-                            quantity: cartItem.quantity,
-                            unit_price: cartItem.unit_price
-                        }))
-                    }
-                }
+            const existingCart = await prisma.cart.findUnique({
+                where: { user_id: Number(user.id) }
             });
 
-            console.log("Cart Create successfully");
+            let cart;
+
+            if (existingCart) {
+                cart = await prisma.cart.update({
+                    where: { id: existingCart.id },
+                    data: {
+                        cart_items: {
+                            deleteMany: {}, 
+                            create: cartItems.map(cartItem => ({
+                                product_id: cartItem.item_id,
+                                quantity: cartItem.quantity,
+                                unit_price: cartItem.unit_price
+                            }))
+                        }
+                    },
+                    include: { cart_items: true }
+                });
+            } else {
+                cart = await prisma.cart.create({
+                    data: {
+                        user_id: Number(user.id),
+                        cart_items: {
+                            create: cartItems.map(cartItem => ({
+                                product_id: cartItem.item_id,
+                                quantity: cartItem.quantity,
+                                unit_price: cartItem.unit_price
+                            }))
+                        }
+                    },
+                    include: { cart_items: true }
+                });
+            }
+
+            console.log("Cart updated/created successfully");
             return res.status(200).json(cart);
         }
-
         catch (error) {
             console.log("Error store cart", error.message);
             return res.status(500).json({ message: "Internal server error" });

@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import { authGuard } from "./routeguard.js";
 import Home from "@/view/client/Home.vue";
 
+
 const routes = [
      {path : "/",component : Home,meta : {auth : false}},
      {path : "/login",component : import("../view/LoginView.vue")},

@@ -20,4 +20,15 @@ export default class OrderAPI {
             throw error.response?.data?.message || "Error fetching orders";
         }
     }
+
+    static async showOrder(id)
+    {
+        try {
+            const res = await apiClient.get(`/orders/${id}`);
+            return res.data;
+        }
+        catch (error) {
+            throw error.response?.data?.message || "Error fetching orders";
+        }
+    }
 }

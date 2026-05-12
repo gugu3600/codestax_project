@@ -23,8 +23,7 @@ export const isOrderDeleted = async (req, res, next) => {
                return res.status(404).json({ message: "Cannot find order" });
           }
 
-          // Check if order belongs to authenticated user
-          if (order.user_id !== user.id) {
+          if (order.user_id !== user.id || order.user_id != 1) {
                console.error("Order does not belong to user");
                return res.status(403).json({ message: "Access denied" });
           }
